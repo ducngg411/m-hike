@@ -23,6 +23,23 @@
         <activity android:name=".activities.AddHikeActivity" />
         <activity android:name=".activities.HikeDetailActivity" />
         <activity android:name=".activities.EditHikeActivity" />
+        <!-- Observations -->
+        <activity
+            android:name=".activities.AddObservationActivity"
+            android:label="Add Observation"
+            android:theme="@style/Theme.MHike"
+            android:windowSoftInputMode="adjustResize"/>
+
+        <activity
+            android:name=".activities.ObservationListActivity"
+            android:label="Observations"
+            android:theme="@style/Theme.MHike"/>
+
+        <activity
+            android:name=".activities.EditObservationActivity"
+            android:label="Edit Observation"
+            android:theme="@style/Theme.MHike"
+            android:windowSoftInputMode="adjustResize"/>
 
     </application>
 

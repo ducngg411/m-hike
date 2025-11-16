@@ -201,7 +201,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(KEY_HIKE_FK, observation.getId());
+        // Use the hikeId foreign key (was incorrectly using observation id)
+        values.put(KEY_HIKE_FK, observation.getHikeId());
         values.put(KEY_OBSERVATION, observation.getObservation());
         values.put(KEY_TIME, observation.getTime());
         values.put(KEY_COMMENT, observation.getComment());
@@ -235,6 +236,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return obsList;
+    }
+
+    // Convenience alias to match call sites
+    public List<Observation> getObservationsByHikeId(int hikeId) {
+        return getObservationsForHike(hikeId);
+    }
+
+    // Get single observation by id
+    public Observation getObservationById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_OBSERVATIONS, null, KEY_OBS_ID + "=?",
+                new String[]{String.valueOf(id)}, null, null, null);
+
+        Observation obs = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            obs = new Observation(
+                    cursor.getInt(cursor.getColumnIndexOrThrow(KEY_OBS_ID)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(KEY_HIKE_FK)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(KEY_OBSERVATION)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(KEY_TIME)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(KEY_COMMENT))
+            );
+            cursor.close();
+        }
+        db.close();
+        return obs;
     }
 
     // Update observation
@@ -291,4 +318,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return hikeList;
     }
+
+
 }

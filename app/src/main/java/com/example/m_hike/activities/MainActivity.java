@@ -58,9 +58,9 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
         loadHikes();
     }
 
-    /**
-     * Initialize all UI components
-     */
+
+     // Initialize all UI components
+
     private void initializeViews() {
         recyclerViewHikes = findViewById(R.id.recyclerViewHikes);
         emptyStateLayout = findViewById(R.id.emptyStateLayout);
@@ -71,9 +71,9 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
         tvHikeCount = findViewById(R.id.tvHikeCount);
     }
 
-    /**
-     * Setup RecyclerView with adapter and layout manager
-     */
+
+    // Setup RecyclerView with adapter and layout manager
+
     private void setupRecyclerView() {
         hikeList = new ArrayList<>();
         hikeAdapter = new HikeAdapter(this, hikeList, this);
@@ -83,9 +83,9 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
         recyclerViewHikes.setHasFixedSize(true);
     }
 
-    /**
-     * Setup button click listeners
-     */
+
+    // Setup button click listeners
+
     private void setupButtonListeners() {
         // Add Hike button
         btnAddHike.setOnClickListener(v -> {
@@ -104,9 +104,9 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
         });
     }
 
-    /**
-     * Load all hikes from database
-     */
+
+    // Load all hikes from database
+
     private void loadHikes() {
         hikeList.clear();
         hikeList.addAll(dbHelper.getAllHikes());
@@ -114,9 +114,9 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
         updateUI();
     }
 
-    /**
-     * Perform search by hike name
-     */
+
+    // Perform search by hike name
+
     private void performSearch() {
         String searchTerm = etSearch.getText().toString().trim();
 
@@ -141,9 +141,9 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
         updateUI();
     }
 
-    /**
-     * Update UI based on hike list
-     */
+
+    // Update UI based on hike list
+
     private void updateUI() {
         int count = hikeList.size();
 
@@ -160,9 +160,9 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
         }
     }
 
-    /**
-     * Show confirmation dialog before deleting all hikes
-     */
+
+    // Show confirmation dialog before deleting all hikes
+
     private void showDeleteAllConfirmation() {
         if (hikeList.isEmpty()) {
             Toast.makeText(this, "No hikes to delete", Toast.LENGTH_SHORT).show();
@@ -179,9 +179,9 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
                 .show();
     }
 
-    /**
-     * Delete all hikes from database
-     */
+
+    // Delete all hikes from database
+
     private void deleteAllHikes() {
         try {
             dbHelper.deleteAllHikes();
@@ -195,9 +195,9 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
         }
     }
 
-    /**
-     * Handle edit button click from adapter
-     */
+
+    // Handle edit button click from adapter
+
     @Override
     public void onEditClick(Hike hike) {
         Intent intent = new Intent(MainActivity.this, EditHikeActivity.class);
@@ -205,9 +205,9 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
         startActivity(intent);
     }
 
-    /**
-     * Handle delete button click from adapter
-     */
+
+    // Handle delete button click from adapter
+
     @Override
     public void onDeleteClick(Hike hike, int position) {
         new AlertDialog.Builder(this)

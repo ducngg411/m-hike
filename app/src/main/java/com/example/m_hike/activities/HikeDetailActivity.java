@@ -167,16 +167,16 @@ public class HikeDetailActivity extends AppCompatActivity {
 
         // Add Observation button
         btnAddObservation.setOnClickListener(v -> {
-            // TODO: Will implement in Feature C
-            Toast.makeText(this, "Add Observation feature coming soon!",
-                    Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(HikeDetailActivity.this, AddObservationActivity.class);
+            intent.putExtra("HIKE_ID", hikeId);
+            startActivity(intent);
         });
 
         // View Observations button
         btnViewObservations.setOnClickListener(v -> {
-            // TODO: Will implement in Feature C
-            Toast.makeText(this, "View Observations feature coming soon!",
-                    Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(HikeDetailActivity.this, ObservationListActivity.class);
+            intent.putExtra("HIKE_ID", hikeId);
+            startActivity(intent);
         });
     }
 

@@ -82,9 +82,9 @@ public class EditHikeActivity extends AppCompatActivity {
         setupButtonListeners();
     }
 
-    /**
-     * Initialize all UI components
-     */
+
+    // Initialize all UI components
+
     private void initializeViews() {
         btnBackEdit = findViewById(R.id.btnBackEdit);
 
@@ -103,9 +103,9 @@ public class EditHikeActivity extends AppCompatActivity {
         btnCancelEdit = findViewById(R.id.btnCancelEdit);
     }
 
-    /**
-     * Setup spinner adapters with data
-     */
+
+    // Setup spinner adapters with data
+
     private void setupSpinners() {
         // Difficulty spinner
         ArrayAdapter<String> difficultyAdapter = new ArrayAdapter<>(
@@ -120,9 +120,9 @@ public class EditHikeActivity extends AppCompatActivity {
         spinnerEditDuration.setAdapter(durationAdapter);
     }
 
-    /**
-     * Setup date picker dialog for date field
-     */
+
+    // Setup date picker dialog for date field
+
     private void setupDatePicker() {
         etEditDate.setOnClickListener(v -> {
             Calendar calendar = Calendar.getInstance();
@@ -144,9 +144,9 @@ public class EditHikeActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Load existing hike data into form
-     */
+
+    // Load existing hike data into form
+
     private void loadHikeData() {
         currentHike = dbHelper.getHikeById(hikeId);
 
@@ -191,9 +191,9 @@ public class EditHikeActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Setup button click listeners
-     */
+
+    // Setup button click listeners
+
     private void setupButtonListeners() {
         // Back button
         btnBackEdit.setOnClickListener(v -> finish());
@@ -205,9 +205,9 @@ public class EditHikeActivity extends AppCompatActivity {
         btnCancelEdit.setOnClickListener(v -> finish());
     }
 
-    /**
-     * Validate all required fields and update hike
-     */
+
+    // Validate all required fields and update hike
+
     private void validateAndUpdate() {
         // Get values from fields
         String name = etEditHikeName.getText().toString().trim();
@@ -316,9 +316,9 @@ public class EditHikeActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Show error message as Toast
-     */
+
+    // Show error message as Toast
+
     private void showError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
