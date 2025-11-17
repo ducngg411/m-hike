@@ -319,5 +319,68 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return hikeList;
     }
 
+    /**
+     * Advanced search hikes by multiple criteria
+     * @param name - search by name (can be partial)
+     * @param location - search by location (can be partial)
+     * @param date - search by exact date
+     * @param minLength - minimum length
+     * @param maxLength - maximum length
+     * @return List of hikes matching ALL provided criteria
+     */
 
+    public List<Hike> advancedSearchHikes(String name, String location, String date,
+                                          Double minLength, Double maxLength) {
+        List<Hike> hikeList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        StringBuilder selectQuery = new StringBuilder("SELECT * FROM " + TABLE_HIKES + " WHERE 1=1");
+        List<String> argsList = new ArrayList<>();
+
+        if (name != null && !name.isEmpty()) {
+            selectQuery.append(" AND " + KEY_NAME + " LIKE ?");
+            argsList.add("%" + name + "%");
+        }
+        if (location != null && !location.isEmpty()) {
+            selectQuery.append(" AND " + KEY_LOCATION + " LIKE ?");
+            argsList.add("%" + location + "%");
+        }
+        if (date != null && !date.isEmpty()) {
+            selectQuery.append(" AND " + KEY_DATE + " = ?");
+            argsList.add(date);
+        }
+        if (minLength != null) {
+            selectQuery.append(" AND " + KEY_LENGTH + " >= ?");
+            argsList.add(String.valueOf(minLength));
+        }
+        if (maxLength != null) {
+            selectQuery.append(" AND " + KEY_LENGTH + " <= ?");
+            argsList.add(String.valueOf(maxLength));
+        }
+
+        selectQuery.append(" ORDER BY " + KEY_DATE + " DESC");
+
+        Cursor cursor = db.rawQuery(selectQuery.toString(), argsList.toArray(new String[0]));
+
+        if (cursor.moveToFirst()) {
+            do {
+                Hike hike = new Hike(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(KEY_HIKE_ID)),           // id
+                        cursor.getString(cursor.getColumnIndexOrThrow(KEY_NAME)),            // name
+                        cursor.getString(cursor.getColumnIndexOrThrow(KEY_LOCATION)),        // location
+                        cursor.getInt(cursor.getColumnIndexOrThrow(KEY_GROUP_SIZE)),         // maxGroupSize
+                        cursor.getString(cursor.getColumnIndexOrThrow(KEY_DURATION)),        // estimatedDuration
+                        cursor.getString(cursor.getColumnIndexOrThrow(KEY_DESCRIPTION)),     // description
+                        cursor.getString(cursor.getColumnIndexOrThrow(KEY_DIFFICULTY)),      // difficulty
+                        cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_LENGTH)),          // length
+                        cursor.getString(cursor.getColumnIndexOrThrow(KEY_PARKING)),         // parkingAvailable
+                        cursor.getString(cursor.getColumnIndexOrThrow(KEY_DATE))
+                );
+                hikeList.add(hike);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return hikeList;
+    }
 }

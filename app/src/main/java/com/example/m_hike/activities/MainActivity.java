@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
     private LinearLayout emptyStateLayout;
     private EditText etSearch;
     private Button btnSearch, btnAddHike, btnDeleteAll;
+    private Button btnAdvancedSearch;
     private TextView tvHikeCount;
 
     // Data
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
         emptyStateLayout = findViewById(R.id.emptyStateLayout);
         etSearch = findViewById(R.id.etSearch);
         btnSearch = findViewById(R.id.btnSearch);
+        btnAdvancedSearch = findViewById(R.id.btnAdvancedSearch);
         btnAddHike = findViewById(R.id.btnAddHike);
         btnDeleteAll = findViewById(R.id.btnDeleteAll);
         tvHikeCount = findViewById(R.id.tvHikeCount);
@@ -95,6 +97,12 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
 
         // Search button
         btnSearch.setOnClickListener(v -> performSearch());
+
+        // Advanced Search button
+        btnAdvancedSearch.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AdvancedSearchActivity.class);
+            startActivity(intent);
+        });
 
         // Delete All button
         btnDeleteAll.setOnClickListener(v -> showDeleteAllConfirmation());

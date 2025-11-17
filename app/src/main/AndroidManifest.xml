@@ -41,6 +41,12 @@
             android:theme="@style/Theme.MHike"
             android:windowSoftInputMode="adjustResize"/>
 
+        <!-- Advanced Search-->
+        <activity android:name=".activities.AdvancedSearchActivity"
+            android:label="Advanced Search"
+            android:theme="@style/Theme.MHike"
+            android:windowSoftInputMode="adjustResize"/>
+
     </application>
 
 </manifest>
