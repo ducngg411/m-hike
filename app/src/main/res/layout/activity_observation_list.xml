@@ -25,7 +25,6 @@
             android:layout_alignParentTop="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_menu_revert"
-            android:tint="#FFFFFF"
             android:contentDescription="Back"/>
 
         <!-- Content -->

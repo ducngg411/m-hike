@@ -20,6 +20,8 @@ import com.example.m_hike.adapters.HikeAdapter;
 import com.example.m_hike.database.DatabaseHelper;
 import com.example.m_hike.models.Hike;
 import com.example.m_hike.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
     private Button btnSearch, btnAddHike, btnDeleteAll;
     private Button btnAdvancedSearch;
     private TextView tvHikeCount;
+    private BottomNavigationView bottomNavigationView;
+
 
     // Data
     private DatabaseHelper dbHelper;
@@ -55,6 +59,9 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
         // Setup button listeners
         setupButtonListeners();
 
+        // Setup Bottom Navigation
+        setupBottomNavigation();
+
         // Load hikes from database
         loadHikes();
     }
@@ -71,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
         btnAddHike = findViewById(R.id.btnAddHike);
         btnDeleteAll = findViewById(R.id.btnDeleteAll);
         tvHikeCount = findViewById(R.id.tvHikeCount);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
     }
 
 
@@ -106,9 +114,37 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
 
         // Delete All button
         btnDeleteAll.setOnClickListener(v -> showDeleteAllConfirmation());
+    }
 
-        recyclerViewHikes.setOnClickListener(v -> {
-            v.getId();
+    // Setup Bottom Navigation
+    private void setupBottomNavigation() {
+        // Select default item
+        bottomNavigationView.setSelectedItemId(R.id.nav_hikes);
+
+        // Handle navigation item selection
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.nav_hikes) {
+                // Already on Hikes screen
+                return true;
+            } else if (itemId == R.id.nav_search) {
+                // Open Advanced Search
+                Intent intent = new Intent(MainActivity.this, AdvancedSearchActivity.class);
+                startActivity(intent);
+                return true;
+            } else if (itemId == R.id.nav_add) {
+                // Open Add Hike
+                Intent intent = new Intent(MainActivity.this, AddHikeActivity.class);
+                startActivity(intent);
+                return true;
+            } else if (itemId == R.id.nav_profile) {
+                // TODO: Tạo ProfileActivity sau
+                Toast.makeText(this, "Profile - Coming soon!", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
+            return false;
         });
     }
 
