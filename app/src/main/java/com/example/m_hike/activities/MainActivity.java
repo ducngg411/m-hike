@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_hike);
+        setContentView(R.layout.activity_main);
 
         // Initialize database
         dbHelper = new DatabaseHelper(this);
