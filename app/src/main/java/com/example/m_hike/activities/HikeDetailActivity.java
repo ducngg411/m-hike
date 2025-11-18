@@ -5,30 +5,20 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.m_hike.activities.MainActivity;
+import com.example.m_hike.R;
 import com.example.m_hike.database.DatabaseHelper;
 import com.example.m_hike.models.Hike;
-import com.example.m_hike.R;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.google.android.material.appbar.MaterialToolbar;
 
 public class HikeDetailActivity extends AppCompatActivity {
-    private ImageButton btnBack;
     private TextView tvDetailHikeName, tvDetailLocation, tvDetailDate,
             tvDetailParking, tvDetailLength, tvDetailDifficulty,
             tvDetailDescription, tvDetailDuration, tvDetailGroupSize;
@@ -42,6 +32,15 @@ public class HikeDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hike_detail);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar); // reverted id
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setTitle("Hike Details");
+            }
+            toolbar.setNavigationOnClickListener(v -> finish());
+        }
 
         // Get hike ID from intent
         hikeId = getIntent().getIntExtra("HIKE_ID", -1);
@@ -66,8 +65,6 @@ public class HikeDetailActivity extends AppCompatActivity {
 
     // Initialize all UI components
     private void initializeViews() {
-        btnBack = findViewById(R.id.btnBack);
-
         tvDetailHikeName = findViewById(R.id.tvDetailHikeName);
         tvDetailLocation = findViewById(R.id.tvDetailLocation);
         tvDetailDate = findViewById(R.id.tvDetailDate);
@@ -90,38 +87,30 @@ public class HikeDetailActivity extends AppCompatActivity {
     private void loadHikeDetails() {
         currentHike = dbHelper.getHikeById(hikeId);
         if (currentHike == null) {
-            Toast.makeText(this, "Error: Hike not found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.na, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
-
-        // Set data to views
         tvDetailHikeName.setText(currentHike.getName());
         tvDetailDifficulty.setText(currentHike.getDifficulty());
         tvDetailLocation.setText(currentHike.getLocation());
         tvDetailDate.setText(currentHike.getDate());
         tvDetailParking.setText(currentHike.getParkingAvailable());
-        tvDetailLength.setText(currentHike.getLength() + " km");
-        tvDetailDescription.setText(currentHike.getDescription());
+        tvDetailLength.setText(getString(R.string.length_km, String.valueOf(currentHike.getLength())));
         tvDetailDuration.setText(currentHike.getEstimatedDuration());
-
-        // Set group size
+        // Group size
         if (currentHike.getMaxGroupSize() > 0) {
-            tvDetailGroupSize.setText(String.valueOf(currentHike.getMaxGroupSize() + "people"));
+            tvDetailGroupSize.setText(getString(R.string.group_size_people, currentHike.getMaxGroupSize()));
         } else {
-            tvDetailGroupSize.setText("N/A");
+            tvDetailGroupSize.setText(getString(R.string.na));
         }
-
-        // Set description
         String description = currentHike.getDescription();
-        if (description != null || !description.trim().isEmpty()) {
+        if (description != null && !description.trim().isEmpty()) {
             tvDetailDescription.setText(description);
             cardDescription.setVisibility(View.VISIBLE);
         } else {
             cardDescription.setVisibility(View.GONE);
         }
-
-        // Set difficulty badge color
         setDifficultyColor(currentHike.getDifficulty());
     }
 
@@ -155,7 +144,6 @@ public class HikeDetailActivity extends AppCompatActivity {
 
     // Setup button listeners
     private void setupButtonListeners() {
-        btnBack.setOnClickListener(v -> finish());
 
         btnEditHike.setOnClickListener(v -> {
             Intent intent = new Intent(HikeDetailActivity.this, EditHikeActivity.class);
@@ -183,13 +171,11 @@ public class HikeDetailActivity extends AppCompatActivity {
     // Show delete confirmation dialog
     private void showDeleteConfirmation() {
         new AlertDialog.Builder(this)
-                .setTitle("Delete Hike")
-                .setMessage("Are you sure you want to delete \"" + currentHike.getName() + "\"?")
+                .setTitle(R.string.delete_hike_dialog_title)
+                .setMessage(getString(R.string.delete_hike_dialog_message, currentHike.getName()))
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton("Delete", (dialog, which) -> {
-                    deleteHike();
-                })
-                .setNegativeButton("Cancel", null)
+                .setPositiveButton(R.string.delete, (dialog, which) -> deleteHike())
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -197,7 +183,7 @@ public class HikeDetailActivity extends AppCompatActivity {
     private void deleteHike() {
         try {
             dbHelper.deleteHike(hikeId);
-            Toast.makeText(this, "Hike deleted successfully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.hike_deleted_success, Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(HikeDetailActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -205,7 +191,6 @@ public class HikeDetailActivity extends AppCompatActivity {
             finish();
         } catch (Exception e) {
             Toast.makeText(this, "Error deleting hike: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
         }
     }
 

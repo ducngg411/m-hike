@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,17 +17,21 @@ import com.example.m_hike.R;
 import com.example.m_hike.adapters.HikeAdapter;
 import com.example.m_hike.database.DatabaseHelper;
 import com.example.m_hike.models.Hike;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+import android.util.Log;
 
 public class AdvancedSearchActivity extends AppCompatActivity
     implements HikeAdapter.OnHikeActionListener {
 
+    private static final String TAG = "AdvancedSearchActivity"; // corrected constant name
+
     // UI components
-    private ImageButton btnBackSearch;
     private TextInputEditText etSearchName, etSearchLocation, etSearchDate,
             etSearchLengthMin, etSearchLengthMax;
     private Button btnSearch, btnClearSearch;
@@ -45,6 +48,17 @@ public class AdvancedSearchActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advanced_search);
+
+        // Setup toolbar
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setTitle("Advanced Search");
+            }
+            toolbar.setNavigationOnClickListener(v -> finish());
+        }
 
         // Initialize database
         dbHelper = new DatabaseHelper(this);
@@ -63,7 +77,6 @@ public class AdvancedSearchActivity extends AppCompatActivity
     }
 
     private void initializeViews() {
-        btnBackSearch = findViewById(R.id.btnBackSearch);
         etSearchName = findViewById(R.id.etSearchName);
         etSearchLocation = findViewById(R.id.etSearchLocation);
         etSearchDate = findViewById(R.id.etSearchDate);
@@ -93,21 +106,18 @@ public class AdvancedSearchActivity extends AppCompatActivity
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
-
             DatePickerDialog datePickerDialog = new DatePickerDialog(
-                    AdvancedSearchActivity.this, ((view, selectedYear, selectedMonth, selectedDay) -> {
-                        String date = String.format("%02d/%02d/%04d", selectedDay, selectedMonth + 1, selectedYear);
-                        etSearchDate.setText(date);
-                    }), year, month, day);
+                this,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String date = String.format(Locale.getDefault(), "%02d/%02d/%04d", selectedDay, selectedMonth + 1, selectedYear);
+                    etSearchDate.setText(date);
+                }, year, month, day);
             datePickerDialog.show();
         });
     }
 
     // Setup button click listeners
     private void setupButtonListeners() {
-        // Back button
-        btnBackSearch.setOnClickListener(v -> finish());
-
         // Search button
         btnSearch.setOnClickListener(v -> performAdvancedSearch());
 
@@ -117,11 +127,11 @@ public class AdvancedSearchActivity extends AppCompatActivity
 
     // Perform advanced search
     private void performAdvancedSearch() {
-        String name = etSearchName.getText().toString().trim();
-        String location = etSearchLocation.getText().toString().trim();
-        String date = etSearchDate.getText().toString().trim();
-        String minLengthStr = etSearchLengthMin.getText().toString().trim();
-        String maxLengthStr = etSearchLengthMax.getText().toString().trim();
+        String name = safeText(etSearchName);
+        String location = safeText(etSearchLocation);
+        String date = safeText(etSearchDate);
+        String minLengthStr = safeText(etSearchLengthMin);
+        String maxLengthStr = safeText(etSearchLengthMax);
 
         // Check if at least one criterion
         if (name.isEmpty() && location.isEmpty() && date.isEmpty() && minLengthStr.isEmpty() && maxLengthStr.isEmpty()) {
@@ -161,16 +171,17 @@ public class AdvancedSearchActivity extends AppCompatActivity
 
         // Perform search
         try {
-            searchResults.clear();
-            searchResults.addAll(dbHelper.advancedSearchHikes(
+            List<Hike> newResults = dbHelper.advancedSearchHikes(
                     name.isEmpty() ? null : name,
                     location.isEmpty() ? null : location,
                     date.isEmpty() ? null : date,
                     minLength,
                     maxLength
-            ));
+            );
 
-            searchAdapter.notifyDataSetChanged();
+            // Update reference & adapter
+            searchResults = newResults;
+            searchAdapter.updateList(newResults); // replaces notifyDataSetChanged()
             updateSearchResultsUI();
 
             // Show message
@@ -184,7 +195,7 @@ public class AdvancedSearchActivity extends AppCompatActivity
         } catch (Exception e) {
             Toast.makeText(this, "Error performing search: " + e.getMessage(),
                     Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
+            Log.e(TAG, "Error performing search", e); // uses TAG
         }
     }
 
@@ -195,18 +206,18 @@ public class AdvancedSearchActivity extends AppCompatActivity
         etSearchDate.setText("");
         etSearchLengthMin.setText("");
         etSearchLengthMax.setText("");
-        searchResults.clear();
-        searchAdapter.notifyDataSetChanged();
+        searchResults = new ArrayList<>(); // new empty list
+        searchAdapter.updateList(searchResults); // replaces notifyDataSetChanged()
         updateSearchResultsUI();
 
         Toast.makeText(this, "Search fields cleared", Toast.LENGTH_SHORT).show();
     }
 
-    // Update search reusults UI
+    // Update search results UI
     private void updateSearchResultsUI() {
         int count = searchResults.size();
 
-        tvSearchResultCount.setText(count + "found");
+        tvSearchResultCount.setText(getResources().getQuantityString(R.plurals.search_results_found, count, count));
 
         if (count == 0) {
             recyclerViewSearchResults.setVisibility(View.GONE);
@@ -245,7 +256,7 @@ public class AdvancedSearchActivity extends AppCompatActivity
                         Toast.makeText(AdvancedSearchActivity.this,
                                 "Error deleting hike: " + e.getMessage(),
                                 Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
+                        Log.e("AdvancedSearch", "Error deleting hike", e);
                     }
                 })
                 .setNegativeButton("Cancel", null)
@@ -267,5 +278,10 @@ public class AdvancedSearchActivity extends AppCompatActivity
         if (dbHelper != null) {
             dbHelper.close();
         }
+    }
+
+    private String safeText(TextInputEditText edit) {
+        CharSequence cs = edit.getText();
+        return cs != null ? cs.toString().trim() : "";
     }
 }

@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.m_hike.activities.AddHikeActivity;
-//import com.example.m_hike.activities.EditHikeActivity;
 import com.example.m_hike.adapters.HikeAdapter;
 import com.example.m_hike.database.DatabaseHelper;
 import com.example.m_hike.models.Hike;
@@ -152,9 +151,9 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
     // Load all hikes from database
 
     private void loadHikes() {
-        hikeList.clear();
-        hikeList.addAll(dbHelper.getAllHikes());
-        hikeAdapter.notifyDataSetChanged();
+        List<Hike> fresh = dbHelper.getAllHikes();
+        hikeList = new ArrayList<>(fresh);
+        hikeAdapter.updateList(hikeList);
         updateUI();
     }
 
@@ -171,17 +170,16 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
         }
 
         // Search in database
-        List<Hike> searchResults = dbHelper.searchHikesByName(searchTerm);
+        List<Hike> results = dbHelper.searchHikesByName(searchTerm);
 
-        if (searchResults.isEmpty()) {
+        if (results.isEmpty()) {
             Toast.makeText(this, "No hikes found matching '" + searchTerm + "'",
                     Toast.LENGTH_SHORT).show();
         }
 
         // Update RecyclerView with search results
-        hikeList.clear();
-        hikeList.addAll(searchResults);
-        hikeAdapter.notifyDataSetChanged();
+        hikeList = new ArrayList<>(results);
+        hikeAdapter.updateList(hikeList);
         updateUI();
     }
 
@@ -229,8 +227,8 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
     private void deleteAllHikes() {
         try {
             dbHelper.deleteAllHikes();
-            hikeList.clear();
-            hikeAdapter.notifyDataSetChanged();
+            hikeList = new ArrayList<>();
+            hikeAdapter.updateList(hikeList);
             updateUI();
             Toast.makeText(this, "All hikes deleted successfully", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {

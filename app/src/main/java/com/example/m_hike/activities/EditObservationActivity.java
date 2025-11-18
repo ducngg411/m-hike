@@ -3,8 +3,8 @@ package com.example.m_hike.activities;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +14,7 @@ import com.example.m_hike.R;
 import com.example.m_hike.database.DatabaseHelper;
 import com.example.m_hike.models.Hike;
 import com.example.m_hike.models.Observation;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.ParseException;
@@ -24,7 +25,6 @@ import java.util.Locale;
 public class EditObservationActivity extends AppCompatActivity {
 
     // UI Components
-    private ImageButton btnBackEditObs;
     private TextView tvEditObsHikeName;
     private TextInputEditText etEditObservation, etEditObsTime, etEditObsComment;
     private Button btnUpdateObs, btnCancelEditObs;
@@ -43,6 +43,17 @@ public class EditObservationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_observation);
+
+        // Setup toolbar
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setTitle("Edit Observation");
+            }
+            toolbar.setNavigationOnClickListener(v -> finish());
+        }
 
         // Get IDs from intent
         observationId = getIntent().getIntExtra("OBSERVATION_ID", -1);
@@ -75,7 +86,6 @@ public class EditObservationActivity extends AppCompatActivity {
 
     // Initialize all UI components
     private void initializeViews() {
-        btnBackEditObs = findViewById(R.id.btnBackEditObs);
         tvEditObsHikeName = findViewById(R.id.tvEditObsHikeName);
         etEditObservation = findViewById(R.id.etEditObservation);
         etEditObsTime = findViewById(R.id.etEditObsTime);
@@ -134,9 +144,12 @@ public class EditObservationActivity extends AppCompatActivity {
     private void parseTimeString(String timeString) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
-            selectedDateTime.setTime(sdf.parse(timeString));
+            java.util.Date parsed = sdf.parse(timeString);
+            if (parsed != null) {
+                selectedDateTime.setTime(parsed);
+            }
         } catch (ParseException e) {
-            e.printStackTrace();
+            Log.e("EditObservation", "Parse time failed", e);
             selectedDateTime = Calendar.getInstance();
         }
     }
@@ -199,8 +212,6 @@ public class EditObservationActivity extends AppCompatActivity {
     // Setup button click listeners
 
     private void setupButtonListeners() {
-        // Back button
-        btnBackEditObs.setOnClickListener(v -> finish());
 
         // Update button
         btnUpdateObs.setOnClickListener(v -> validateAndUpdate());
@@ -213,9 +224,9 @@ public class EditObservationActivity extends AppCompatActivity {
     // Validate and update observation
 
     private void validateAndUpdate() {
-        String observation = etEditObservation.getText().toString().trim();
-        String time = etEditObsTime.getText().toString().trim();
-        String comment = etEditObsComment.getText().toString().trim();
+        String observation = safeText(etEditObservation);
+        String time = safeText(etEditObsTime);
+        String comment = safeText(etEditObsComment);
 
         // Validation
         if (observation.isEmpty()) {
@@ -246,8 +257,8 @@ public class EditObservationActivity extends AppCompatActivity {
                 showError("Failed to update observation. Please try again.");
             }
         } catch (Exception e) {
+            Log.e("EditObservation", "Update failed", e);
             showError("Error: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -264,5 +275,10 @@ public class EditObservationActivity extends AppCompatActivity {
         if (dbHelper != null) {
             dbHelper.close();
         }
+    }
+
+    private String safeText(TextInputEditText edit) {
+        CharSequence cs = edit.getText();
+        return cs != null ? cs.toString().trim() : "";
     }
 }

@@ -1,11 +1,11 @@
 package com.example.m_hike.activities;
 
+import java.util.Locale;
+import android.util.Log;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.m_hike.R;
 import com.example.m_hike.database.DatabaseHelper;
 import com.example.m_hike.models.Hike;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Calendar;
@@ -23,7 +24,6 @@ import java.util.Calendar;
 public class EditHikeActivity extends AppCompatActivity {
 
     // UI Components
-    private ImageButton btnBackEdit;
     private TextInputEditText etEditHikeName, etEditLocation, etEditDate, etEditLength,
             etEditDescription, etEditGroupSize;
     private RadioGroup rgEditParking;
@@ -38,8 +38,8 @@ public class EditHikeActivity extends AppCompatActivity {
     private int hikeId;
 
     // Data arrays
-    private String[] difficultyLevels = {"Easy", "Moderate", "Hard", "Very Hard"};
-    private String[] durationOptions = {"Less than 1 hour", "1-2 hours", "2-4 hours",
+    private final String[] difficultyLevels = {"Easy", "Moderate", "Hard", "Very Hard"};
+    private final String[] durationOptions = {"Less than 1 hour", "1-2 hours", "2-4 hours",
             "4-6 hours", "6-8 hours", "More than 8 hours"};
 
     @Override
@@ -49,6 +49,17 @@ public class EditHikeActivity extends AppCompatActivity {
         Log.d("EditHikeActivity", "==========================================");
         Log.d("EditHikeActivity", "EditHikeActivity started!");
         setContentView(R.layout.activity_edit_hike);
+
+        // Setup toolbar
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setTitle("Edit Hike");
+            }
+            toolbar.setNavigationOnClickListener(v -> finish());
+        }
 
         // Get hike ID from intent
         hikeId = getIntent().getIntExtra("HIKE_ID", -1);
@@ -86,8 +97,6 @@ public class EditHikeActivity extends AppCompatActivity {
     // Initialize all UI components
 
     private void initializeViews() {
-        btnBackEdit = findViewById(R.id.btnBackEdit);
-
         etEditHikeName = findViewById(R.id.etEditHikeName);
         etEditLocation = findViewById(R.id.etEditLocation);
         etEditDate = findViewById(R.id.etEditDate);
@@ -129,17 +138,12 @@ public class EditHikeActivity extends AppCompatActivity {
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
-
             DatePickerDialog datePickerDialog = new DatePickerDialog(
-                    EditHikeActivity.this,
-                    (view, selectedYear, selectedMonth, selectedDay) -> {
-                        // Format: DD/MM/YYYY
-                        String date = String.format("%02d/%02d/%04d",
-                                selectedDay, selectedMonth + 1, selectedYear);
-                        etEditDate.setText(date);
-                    },
-                    year, month, day
-            );
+                EditHikeActivity.this,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String date = String.format(Locale.getDefault(), "%02d/%02d/%04d", selectedDay, selectedMonth + 1, selectedYear);
+                    etEditDate.setText(date);
+                }, year, month, day);
             datePickerDialog.show();
         });
     }
@@ -168,7 +172,7 @@ public class EditHikeActivity extends AppCompatActivity {
         }
 
         // Set parking radio button
-        if (currentHike.getParkingAvailable().equals("Yes")) {
+        if ("Yes".equals(currentHike.getParkingAvailable())) {
             ((RadioButton) findViewById(R.id.rbEditParkingYes)).setChecked(true);
         } else {
             ((RadioButton) findViewById(R.id.rbEditParkingNo)).setChecked(true);
@@ -195,8 +199,6 @@ public class EditHikeActivity extends AppCompatActivity {
     // Setup button click listeners
 
     private void setupButtonListeners() {
-        // Back button
-        btnBackEdit.setOnClickListener(v -> finish());
 
         // Update button
         btnUpdateHike.setOnClickListener(v -> validateAndUpdate());
@@ -209,13 +211,18 @@ public class EditHikeActivity extends AppCompatActivity {
     // Validate all required fields and update hike
 
     private void validateAndUpdate() {
-        // Get values from fields
-        String name = etEditHikeName.getText().toString().trim();
-        String location = etEditLocation.getText().toString().trim();
-        String date = etEditDate.getText().toString().trim();
-        String lengthStr = etEditLength.getText().toString().trim();
-        String description = etEditDescription.getText().toString().trim();
-        String groupSizeStr = etEditGroupSize.getText().toString().trim();
+        CharSequence nameCs = etEditHikeName.getText();
+        String name = nameCs != null ? nameCs.toString().trim() : "";
+        CharSequence locCs = etEditLocation.getText();
+        String location = locCs != null ? locCs.toString().trim() : "";
+        CharSequence dateCs = etEditDate.getText();
+        String date = dateCs != null ? dateCs.toString().trim() : "";
+        CharSequence lenCs = etEditLength.getText();
+        String lengthStr = lenCs != null ? lenCs.toString().trim() : "";
+        CharSequence descCs = etEditDescription.getText();
+        String description = descCs != null ? descCs.toString().trim() : "";
+        CharSequence groupCs = etEditGroupSize.getText();
+        String groupSizeStr = groupCs != null ? groupCs.toString().trim() : "";
 
         // Get selected parking option
         int selectedParkingId = rgEditParking.getCheckedRadioButtonId();
@@ -312,7 +319,7 @@ public class EditHikeActivity extends AppCompatActivity {
             }
         } catch (Exception e) {
             showError("Error: " + e.getMessage());
-            e.printStackTrace();
+            Log.e("EditHike", "Update error", e);
         }
     }
 

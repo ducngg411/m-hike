@@ -1,382 +1,389 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5"
-    android:fillViewport="true">
+    android:orientation="vertical"
+    android:background="#F5F5F5">
 
-    <LinearLayout
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.Material3.ActionBar"
+        app:title="Advanced Search"
+        android:paddingTop="20dp"
+        app:titleCentered="true"
+        app:navigationIconTint="@android:color/white"
+        app:titleTextColor="@android:color/white" />
 
-        <!-- Header Section -->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:background="@drawable/search_header_background"
-            android:padding="20dp">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
-            <!-- Back Button -->
-            <ImageButton
-                android:id="@+id/btnBackSearch"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@android:drawable/ic_menu_revert"
-                android:tint="#FFFFFF"
-                android:contentDescription="Back"/>
-
-            <!-- Title -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:orientation="vertical"
-                android:gravity="center">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🔎"
-                    android:textSize="48sp"
-                    android:layout_marginBottom="8dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Advanced Search"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginBottom="4dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Search by multiple criteria"
-                    android:textSize="14sp"
-                    android:textColor="#E0E0E0"/>
-            </LinearLayout>
-        </RelativeLayout>
-
-        <!-- Search Filters Card -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="20dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Search Criteria"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#5E35B1"
-                    android:layout_marginBottom="16dp"/>
-
-                <!-- Name Search -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Hike Name"
-                    android:textStyle="bold"
-                    android:textColor="#34495E"
-                    android:textSize="14sp"/>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="16dp"
-                    app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="8dp"
-                    app:boxCornerRadiusTopEnd="8dp"
-                    app:boxCornerRadiusBottomStart="8dp"
-                    app:boxCornerRadiusBottomEnd="8dp"
-                    app:boxStrokeColor="#5E35B1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etSearchName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Enter hike name..."
-                        android:inputType="textCapWords"
-                        android:maxLines="1"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Location Search -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Location"
-                    android:textStyle="bold"
-                    android:textColor="#34495E"
-                    android:textSize="14sp"/>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="16dp"
-                    app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="8dp"
-                    app:boxCornerRadiusTopEnd="8dp"
-                    app:boxCornerRadiusBottomStart="8dp"
-                    app:boxCornerRadiusBottomEnd="8dp"
-                    app:boxStrokeColor="#5E35B1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etSearchLocation"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Enter location..."
-                        android:inputType="textCapWords"
-                        android:maxLines="1"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Date Search -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Date"
-                    android:textStyle="bold"
-                    android:textColor="#34495E"
-                    android:textSize="14sp"/>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="16dp"
-                    app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="8dp"
-                    app:boxCornerRadiusTopEnd="8dp"
-                    app:boxCornerRadiusBottomStart="8dp"
-                    app:boxCornerRadiusBottomEnd="8dp"
-                    app:endIconMode="custom"
-                    app:endIconDrawable="@android:drawable/ic_menu_my_calendar"
-                    app:boxStrokeColor="#5E35B1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etSearchDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Select date..."
-                        android:focusable="false"
-                        android:clickable="true"
-                        android:inputType="none"
-                        android:maxLines="1"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Length Range -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Length Range (km)"
-                    android:textStyle="bold"
-                    android:textColor="#34495E"
-                    android:textSize="14sp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="8dp">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="8dp"
-                        app:boxBackgroundMode="outline"
-                        app:boxCornerRadiusTopStart="8dp"
-                        app:boxCornerRadiusTopEnd="8dp"
-                        app:boxCornerRadiusBottomStart="8dp"
-                        app:boxCornerRadiusBottomEnd="8dp"
-                        app:boxStrokeColor="#5E35B1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etSearchLengthMin"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Min"
-                            android:inputType="numberDecimal"
-                            android:maxLines="1"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="to"
-                        android:textSize="16sp"
-                        android:layout_gravity="center_vertical"
-                        android:paddingStart="4dp"
-                        android:paddingEnd="4dp"/>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="8dp"
-                        app:boxBackgroundMode="outline"
-                        app:boxCornerRadiusTopStart="8dp"
-                        app:boxCornerRadiusTopEnd="8dp"
-                        app:boxCornerRadiusBottomStart="8dp"
-                        app:boxCornerRadiusBottomEnd="8dp"
-                        app:boxStrokeColor="#5E35B1">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etSearchLengthMax"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Max"
-                            android:inputType="numberDecimal"
-                            android:maxLines="1"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
-
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Action Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp">
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnClearSearch"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_weight="1"
-                android:text="Clear"
-                android:textSize="16sp"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#95A5A6"
-                android:layout_marginEnd="8dp"
-                app:cornerRadius="8dp"
-                app:icon="@android:drawable/ic_menu_close_clear_cancel"
-                app:iconTint="#FFFFFF"/>
+            <!-- Header Section -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:background="@drawable/search_header_background"
+                android:padding="20dp">
 
-            <Button
-                android:id="@+id/btnSearch"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_weight="1"
-                android:text="Search"
-                android:textSize="16sp"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#5E35B1"
-                android:layout_marginStart="8dp"
-                app:cornerRadius="8dp"
-                app:icon="@android:drawable/ic_menu_search"
-                app:iconTint="#FFFFFF"/>
-        </LinearLayout>
+                <!-- Title -->
+                <LinearLayout
+                    android:layout_width="205dp"
+                    android:layout_height="180dp"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-        <!-- Results Section -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp">
+                    <TextView
+                        android:layout_width="83dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="1dp"
+                        android:text="🔎"
+                        android:textSize="48sp" />
 
-            <LinearLayout
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:text="Advanced Search"
+                        android:textColor="#FFFFFF"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:text="Search by multiple criteria"
+                        android:textColor="#E0E0E0"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <!-- Search Filters Card -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:layout_margin="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Search Results"
+                        android:text="Search Criteria"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="#2C3E50"/>
-
-                    <TextView
-                        android:id="@+id/tvSearchResultCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0 found"
-                        android:textSize="14sp"
-                        android:textColor="#7F8C8D"
-                        android:background="@drawable/count_badge"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="12dp"
-                        android:paddingTop="4dp"
-                        android:paddingBottom="4dp"/>
-                </LinearLayout>
-
-                <!-- RecyclerView for Results -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewSearchResults"
-                    android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    android:clipToPadding="false"/>
-
-                <!-- Empty Results State -->
-                <LinearLayout
-                    android:id="@+id/emptySearchLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:visibility="visible">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🔍"
-                        android:textSize="64sp"
+                        android:textColor="#5E35B1"
                         android:layout_marginBottom="16dp"/>
 
+                    <!-- Name Search -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="No results yet"
-                        android:textSize="18sp"
+                        android:text="Hike Name"
                         android:textStyle="bold"
-                        android:textColor="#7F8C8D"
-                        android:layout_marginBottom="8dp"/>
+                        android:textColor="#34495E"
+                        android:textSize="14sp"/>
 
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="16dp"
+                        app:boxBackgroundMode="outline"
+                        app:boxCornerRadiusTopStart="8dp"
+                        app:boxCornerRadiusTopEnd="8dp"
+                        app:boxCornerRadiusBottomStart="8dp"
+                        app:boxCornerRadiusBottomEnd="8dp"
+                        app:boxStrokeColor="#5E35B1">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etSearchName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Enter hike name..."
+                            android:inputType="textCapWords"
+                            android:maxLines="1"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Location Search -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Enter criteria above and tap Search"
-                        android:textSize="14sp"
-                        android:textColor="#95A5A6"
-                        android:gravity="center"/>
+                        android:text="Location"
+                        android:textStyle="bold"
+                        android:textColor="#34495E"
+                        android:textSize="14sp"/>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="16dp"
+                        app:boxBackgroundMode="outline"
+                        app:boxCornerRadiusTopStart="8dp"
+                        app:boxCornerRadiusTopEnd="8dp"
+                        app:boxCornerRadiusBottomStart="8dp"
+                        app:boxCornerRadiusBottomEnd="8dp"
+                        app:boxStrokeColor="#5E35B1">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etSearchLocation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Enter location..."
+                            android:inputType="textCapWords"
+                            android:maxLines="1"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Date Search -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Date"
+                        android:textStyle="bold"
+                        android:textColor="#34495E"
+                        android:textSize="14sp"/>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="16dp"
+                        app:boxBackgroundMode="outline"
+                        app:boxCornerRadiusTopStart="8dp"
+                        app:boxCornerRadiusTopEnd="8dp"
+                        app:boxCornerRadiusBottomStart="8dp"
+                        app:boxCornerRadiusBottomEnd="8dp"
+                        app:endIconMode="custom"
+                        app:endIconDrawable="@android:drawable/ic_menu_my_calendar"
+                        app:boxStrokeColor="#5E35B1">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etSearchDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Select date..."
+                            android:focusable="false"
+                            android:clickable="true"
+                            android:inputType="none"
+                            android:maxLines="1"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Length Range -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Length Range (km)"
+                        android:textStyle="bold"
+                        android:textColor="#34495E"
+                        android:textSize="14sp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="8dp">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            app:boxBackgroundMode="outline"
+                            app:boxCornerRadiusTopStart="8dp"
+                            app:boxCornerRadiusTopEnd="8dp"
+                            app:boxCornerRadiusBottomStart="8dp"
+                            app:boxCornerRadiusBottomEnd="8dp"
+                            app:boxStrokeColor="#5E35B1">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etSearchLengthMin"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Min"
+                                android:inputType="numberDecimal"
+                                android:maxLines="1"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="to"
+                            android:textSize="16sp"
+                            android:layout_gravity="center_vertical"
+                            android:paddingStart="4dp"
+                            android:paddingEnd="4dp"/>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            app:boxBackgroundMode="outline"
+                            app:boxCornerRadiusTopStart="8dp"
+                            app:boxCornerRadiusTopEnd="8dp"
+                            app:boxCornerRadiusBottomStart="8dp"
+                            app:boxCornerRadiusBottomEnd="8dp"
+                            app:boxStrokeColor="#5E35B1">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etSearchLengthMax"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Max"
+                                android:inputType="numberDecimal"
+                                android:maxLines="1"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp">
+
+                <Button
+                    android:id="@+id/btnClearSearch"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:text="Clear"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#95A5A6"
+                    android:layout_marginEnd="8dp"
+                    app:cornerRadius="8dp"
+                    app:icon="@android:drawable/ic_menu_close_clear_cancel"
+                    app:iconTint="#FFFFFF"/>
+
+                <Button
+                    android:id="@+id/btnSearch"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:text="Search"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#5E35B1"
+                    android:layout_marginStart="8dp"
+                    app:cornerRadius="8dp"
+                    app:icon="@android:drawable/ic_menu_search"
+                    app:iconTint="#FFFFFF"/>
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
 
-    </LinearLayout>
-</ScrollView>
+            <!-- Results Section -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="12dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Search Results"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="#2C3E50"/>
+
+                        <TextView
+                            android:id="@+id/tvSearchResultCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0 found"
+                            android:textSize="14sp"
+                            android:textColor="#7F8C8D"
+                            android:background="@drawable/count_badge"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="12dp"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp"/>
+                    </LinearLayout>
+
+                    <!-- RecyclerView for Results -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewSearchResults"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
+                        android:clipToPadding="false"/>
+
+                    <!-- Empty Results State -->
+                    <LinearLayout
+                        android:id="@+id/emptySearchLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:visibility="visible">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🔍"
+                            android:textSize="64sp"
+                            android:layout_marginBottom="16dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="No results yet"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="#7F8C8D"
+                            android:layout_marginBottom="8dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Enter criteria above and tap Search"
+                            android:textSize="14sp"
+                            android:textColor="#95A5A6"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,10 +1,11 @@
 package com.example.m_hike.activities;
 
+import java.util.Locale;
+import android.util.Log;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,13 +15,13 @@ import com.example.m_hike.R;
 import com.example.m_hike.database.DatabaseHelper;
 import com.example.m_hike.models.Hike;
 import com.example.m_hike.models.Observation;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class AddObservationActivity extends AppCompatActivity {
-    private ImageButton btnBackObs;
     private TextView tvObsHikeName;
     private TextInputEditText etObservation, etObsTime, etObsComment;
     private Button btnSaveObs, btnCancelObs;
@@ -37,6 +38,17 @@ public class AddObservationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_observation);
+
+        // Setup toolbar
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setTitle("Add Observation");
+            }
+            toolbar.setNavigationOnClickListener(v -> finish());
+        }
 
         // Get hike id from intent
         hikeId = getIntent().getIntExtra("HIKE_ID", -1);
@@ -66,7 +78,6 @@ public class AddObservationActivity extends AppCompatActivity {
 
     // Initialize all UI components
     private void initializeViews() {
-        btnBackObs = findViewById(R.id.btnBackObs);
         tvObsHikeName = findViewById(R.id.tvObsHikeName);
         etObservation = findViewById(R.id.etObservation);
         etObsTime = findViewById(R.id.etObsTime);
@@ -132,15 +143,12 @@ public class AddObservationActivity extends AppCompatActivity {
 
     // Update date time display in EditText
     private void updateDateTimeDisplay() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
         etObsTime.setText(sdf.format(selectedDateTime.getTime()));
     }
 
     // Setup button listeners
     private void setupButtonListeners() {
-        // Back button
-        btnBackObs.setOnClickListener(v -> finish());
-
         // Save observation button
         btnSaveObs.setOnClickListener(v -> validateAndSave());
 
@@ -150,9 +158,9 @@ public class AddObservationActivity extends AppCompatActivity {
 
     // Validate input and save observation
     private void validateAndSave() {
-        String observation = etObservation.getText().toString().trim();
-        String time = etObsTime.getText().toString().trim();
-        String comment = etObsComment.getText().toString().trim();
+        String observation = safeText(etObservation);
+        String time = safeText(etObsTime);
+        String comment = safeText(etObsComment);
 
         // Validation
         if (observation.isEmpty()) {
@@ -180,8 +188,14 @@ public class AddObservationActivity extends AppCompatActivity {
             }
         } catch (Exception e) {
             showError("Error: " + e.getMessage());
-            e.printStackTrace();
+            Log.e("AddObservation", "Add failed", e);
         }
+    }
+
+    // Safe text extraction
+    private String safeText(TextInputEditText edit){
+        CharSequence cs = edit.getText();
+        return cs != null ? cs.toString().trim() : "";
     }
 
     // Show error message

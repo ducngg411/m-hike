@@ -5,6 +5,21 @@
     android:layout_height="match_parent"
     android:background="#F5F5F5">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.Material3.ActionBar"
+        app:title="Observations"
+        android:paddingTop="20dp"
+        app:titleCentered="true"
+        app:navigationIconTint="@android:color/white"
+        app:titleTextColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <!-- Header Section -->
     <RelativeLayout
         android:id="@+id/obsHeaderSection"
@@ -12,20 +27,10 @@
         android:layout_height="160dp"
         android:background="@drawable/observation_header_background"
         android:padding="20dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Back Button -->
-        <ImageButton
-            android:id="@+id/btnBackObsList"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_revert"
-            android:contentDescription="Back"/>
 
         <!-- Content -->
         <LinearLayout

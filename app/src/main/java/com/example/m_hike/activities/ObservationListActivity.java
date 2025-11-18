@@ -3,8 +3,8 @@ package com.example.m_hike.activities;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +18,7 @@ import com.example.m_hike.adapters.ObservationAdapter;
 import com.example.m_hike.database.DatabaseHelper;
 import com.example.m_hike.models.Hike;
 import com.example.m_hike.models.Observation;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -28,7 +29,6 @@ public class ObservationListActivity extends AppCompatActivity
         implements ObservationAdapter.OnObservationActionListener {
 
     // UI Components
-    private ImageButton btnBackObsList;
     private TextView tvObsListHikeName, tvObsCount;
     private RecyclerView recyclerViewObservations;
     private LinearLayout emptyObsLayout;
@@ -45,6 +45,17 @@ public class ObservationListActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_observation_list);
+
+        // Setup toolbar
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setTitle("Observations");
+            }
+            toolbar.setNavigationOnClickListener(v -> finish());
+        }
 
         // Get hike ID from intent
         hikeId = getIntent().getIntExtra("HIKE_ID", -1);
@@ -76,7 +87,6 @@ public class ObservationListActivity extends AppCompatActivity
 
     // Initialize all UI components
     private void initializeViews() {
-        btnBackObsList = findViewById(R.id.btnBackObsList);
         tvObsListHikeName = findViewById(R.id.tvObsListHikeName);
         tvObsCount = findViewById(R.id.tvObsCount);
         recyclerViewObservations = findViewById(R.id.recyclerViewObservations);
@@ -107,7 +117,6 @@ public class ObservationListActivity extends AppCompatActivity
 
     // Setup button click listeners
     private void setupButtonListeners() {
-        btnBackObsList.setOnClickListener(v -> finish());
         fabAddObservation.setOnClickListener(v -> {
             // Open AddObservationActivity}
             Intent intent = new Intent(ObservationListActivity.this, AddObservationActivity.class);
@@ -127,10 +136,7 @@ public class ObservationListActivity extends AppCompatActivity
     // Update UI based on observation list
     private void updateUI() {
         int count = observationList.size();
-        // Update count
-        tvObsCount.setText(count + (count==1 ? "item" : "items"));
-
-        // Show/hide empty state
+        tvObsCount.setText(getResources().getQuantityString(R.plurals.observation_items, count, count));
         if (count == 0) {
             recyclerViewObservations.setVisibility(View.GONE);
             emptyObsLayout.setVisibility(View.VISIBLE);
@@ -153,26 +159,22 @@ public class ObservationListActivity extends AppCompatActivity
     @Override
     public void onDeleteClick(Observation observation, int position) {
         new AlertDialog.Builder(this)
-                .setTitle("Delete Observation")
-                .setMessage("Are you sure you want to delete this observation?")
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton("Delete", (dialog, which) -> {
-                    try {
-                        dbHelper.deleteObservation(observation.getId());
-                        observationAdapter.removeItem(position);
-                        updateUI();
-                        Toast.makeText(ObservationListActivity.this,
-                                "Observation deleted successfully",
-                                Toast.LENGTH_SHORT).show();
-                    } catch (Exception e) {
-                        Toast.makeText(ObservationListActivity.this,
-                                "Error deleting observation: " + e.getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
+            .setTitle(R.string.delete_observation_dialog_title)
+            .setMessage(R.string.delete_observation_dialog_message)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setPositiveButton(R.string.delete, (dialog, which) -> {
+                try {
+                    dbHelper.deleteObservation(observation.getId());
+                    observationAdapter.removeItem(position);
+                    updateUI();
+                    Toast.makeText(this, R.string.observation_deleted_success, Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Log.e("ObservationList", "Delete failed", e);
+                    Toast.makeText(this, "Error deleting observation: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            })
+            .setNegativeButton(R.string.cancel, null)
+            .show();
     }
 
     @Override

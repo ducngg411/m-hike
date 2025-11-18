@@ -1,6 +1,9 @@
 // java
 package com.example.m_hike.activities;
 
+import java.util.Locale;
+import android.util.Log;
+
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -9,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -21,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.m_hike.R;
 import com.example.m_hike.database.DatabaseHelper;
 import com.example.m_hike.models.Hike;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Calendar;
@@ -44,9 +47,16 @@ public class AddHikeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_hike);
-
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setTitle("Add Hike");
+            }
+            toolbar.setNavigationOnClickListener(v -> finish());
+        }
         dbHelper = new DatabaseHelper(this);
-
         initializeViews();
         setupSpinners();
         setupDatePicker();
@@ -92,15 +102,12 @@ public class AddHikeActivity extends AppCompatActivity {
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
-
             DatePickerDialog datePickerDialog = new DatePickerDialog(
-                    AddHikeActivity.this,
-                    (view, selectedYear, selectedMonth, selectedDay) -> {
-                        String date = String.format("%02d/%02d/%04d", selectedDay, selectedMonth + 1, selectedYear);
-                        etDate.setText(date);
-                    },
-                    year, month, day
-            );
+                AddHikeActivity.this,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String date = String.format(Locale.getDefault(), "%02d/%02d/%04d", selectedDay, selectedMonth + 1, selectedYear);
+                    etDate.setText(date);
+                }, year, month, day);
             datePickerDialog.show();
         });
     }
@@ -113,12 +120,18 @@ public class AddHikeActivity extends AppCompatActivity {
 
     // Validate all required fields and show confirmation dialog
     private void validateAndShowConfirmation() {
-        String name = etHikeName.getText().toString().trim();
-        String location = etLocation.getText().toString().trim();
-        String date = etDate.getText().toString().trim();
-        String lengthStr = etLength.getText().toString().trim();
-        String description = etDescription.getText().toString().trim();
-        String groupSizeStr = etGroupSize.getText().toString().trim();
+        CharSequence nameCs = etHikeName.getText();
+        String name = nameCs != null ? nameCs.toString().trim() : "";
+        CharSequence locCs = etLocation.getText();
+        String location = locCs != null ? locCs.toString().trim() : "";
+        CharSequence dateCs = etDate.getText();
+        String date = dateCs != null ? dateCs.toString().trim() : "";
+        CharSequence lenCs = etLength.getText();
+        String lengthStr = lenCs != null ? lenCs.toString().trim() : "";
+        CharSequence descCs = etDescription.getText();
+        String description = descCs != null ? descCs.toString().trim() : "";
+        CharSequence groupCs = etGroupSize.getText();
+        String groupSizeStr = groupCs != null ? groupCs.toString().trim() : "";
 
         int selectedParkingId = rgParking.getCheckedRadioButtonId();
 
@@ -206,7 +219,7 @@ public class AddHikeActivity extends AppCompatActivity {
         tvName.setText(name);
         tvLocation.setText(location);
         tvDate.setText(date);
-        tvLength.setText(length + " km");
+        tvLength.setText(getString(R.string.length_km, String.valueOf(length)));
         tvDifficulty.setText(difficulty);
         tvDuration.setText(duration);
         tvParking.setText(parking);
@@ -245,7 +258,7 @@ public class AddHikeActivity extends AppCompatActivity {
             }
         } catch (Exception e) {
             showError("Error: " + e.getMessage());
-            e.printStackTrace();
+            Log.e("AddHike", "Save error", e);
         }
     }
 

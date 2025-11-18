@@ -1,3 +1,33 @@
 <resources>
     <string name="app_name">M-Hike</string>
+    <string name="hike_details_title">Hike Details</string>
+    <string name="edit_hike_title">Edit Hike</string>
+    <string name="add_hike_title">Add Hike</string>
+    <string name="observations_title">Observations</string>
+    <string name="add_observation_title">Add Observation</string>
+    <string name="edit_observation_title">Edit Observation</string>
+
+    <string name="length_km">%1$s km</string>
+    <string name="group_size_people">%1$d people</string>
+    <string name="na">N/A</string>
+    <string name="delete_hike_dialog_title">Delete Hike</string>
+    <string name="delete_hike_dialog_message">Are you sure you want to delete "%1$s"?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="delete_observation_dialog_title">Delete Observation</string>
+    <string name="delete_observation_dialog_message">Are you sure you want to delete this observation?</string>
+
+    <plurals name="observation_items">
+        <item quantity="one">1 item</item>
+        <item quantity="other">%1$d items</item>
+    </plurals>
+
+    <plurals name="search_results_found">
+        <item quantity="one">1 found</item>
+        <item quantity="other">%1$d found</item>
+    </plurals>
+
+    <string name="hike_deleted_success">Hike deleted successfully</string>
+    <string name="observation_deleted_success">Observation deleted successfully</string>
 </resources>

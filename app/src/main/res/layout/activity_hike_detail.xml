@@ -1,469 +1,471 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5"
-    android:fillViewport="true">
+    android:orientation="vertical"
+    android:background="#F5F5F5">
 
-    <LinearLayout
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.Material3.ActionBar"
+        app:title="Hike Details"
+        android:paddingTop="20dp"
+        app:titleCentered="true"
+        app:navigationIconTint="@android:color/white"
+        app:titleTextColor="@android:color/white" />
 
-        <!-- Header Section with gradient -->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/detail_header_background"
-            android:padding="24dp">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
-            <!-- Back Button -->
-            <ImageButton
-                android:id="@+id/btnBack"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@android:drawable/ic_menu_revert"
-                android:tint="#FFFFFF"
-                android:contentDescription="Back"/>
-
-            <!-- Hike Name -->
-            <TextView
-                android:id="@+id/tvDetailHikeName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="Snowdon Mountain"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:gravity="center"
-                android:maxLines="2"
-                android:ellipsize="end"/>
-
-            <!-- Difficulty Badge -->
-            <TextView
-                android:id="@+id/tvDetailDifficulty"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:text="Hard"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:background="@drawable/badge_difficulty_large"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"/>
-        </RelativeLayout>
-
-        <!-- Content Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
-            <!-- Quick Info Card -->
-            <androidx.cardview.widget.CardView
+            <!-- Header Section with gradient -->
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                android:layout_height="200dp"
+                android:background="@drawable/detail_header_background"
+                android:padding="24dp">
 
-                <LinearLayout
+                <!-- Hike Name -->
+                <TextView
+                    android:id="@+id/tvDetailHikeName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
+                    android:text="Snowdon Mountain"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:ellipsize="end" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Quick Info"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="#2C3E50"
-                        android:layout_marginBottom="16dp"/>
-
-                    <!-- Location Row -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="12dp"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:text="📍"
-                            android:textSize="20sp"
-                            android:gravity="center"/>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:layout_marginStart="12dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Location"
-                                android:textSize="12sp"
-                                android:textColor="#95A5A6"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:id="@+id/tvDetailLocation"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Wales, UK"
-                                android:textSize="16sp"
-                                android:textColor="#2C3E50"
-                                android:layout_marginTop="2dp"/>
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <!-- Date Row -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="12dp"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:text="📅"
-                            android:textSize="20sp"
-                            android:gravity="center"/>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:layout_marginStart="12dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Date"
-                                android:textSize="12sp"
-                                android:textColor="#95A5A6"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:id="@+id/tvDetailDate"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="15/12/2024"
-                                android:textSize="16sp"
-                                android:textColor="#2C3E50"
-                                android:layout_marginTop="2dp"/>
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <!-- Length Row -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="12dp"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:text="🥾"
-                            android:textSize="20sp"
-                            android:gravity="center"/>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:layout_marginStart="12dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Length"
-                                android:textSize="12sp"
-                                android:textColor="#95A5A6"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:id="@+id/tvDetailLength"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="10.5 km"
-                                android:textSize="16sp"
-                                android:textColor="#2C3E50"
-                                android:layout_marginTop="2dp"/>
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <!-- Parking Row -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="12dp"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:text="🚗"
-                            android:textSize="20sp"
-                            android:gravity="center"/>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:layout_marginStart="12dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Parking Available"
-                                android:textSize="12sp"
-                                android:textColor="#95A5A6"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:id="@+id/tvDetailParking"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Yes"
-                                android:textSize="16sp"
-                                android:textColor="#2C3E50"
-                                android:layout_marginTop="2dp"/>
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <!-- Duration Row -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="12dp"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:text="⏱️"
-                            android:textSize="20sp"
-                            android:gravity="center"/>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:layout_marginStart="12dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Estimated Duration"
-                                android:textSize="12sp"
-                                android:textColor="#95A5A6"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:id="@+id/tvDetailDuration"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="4-6 hours"
-                                android:textSize="16sp"
-                                android:textColor="#2C3E50"
-                                android:layout_marginTop="2dp"/>
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <!-- Group Size Row -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:text="👥"
-                            android:textSize="20sp"
-                            android:gravity="center"/>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:layout_marginStart="12dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Maximum Group Size"
-                                android:textSize="12sp"
-                                android:textColor="#95A5A6"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:id="@+id/tvDetailGroupSize"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="10 people"
-                                android:textSize="16sp"
-                                android:textColor="#2C3E50"
-                                android:layout_marginTop="2dp"/>
-                        </LinearLayout>
-                    </LinearLayout>
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Description Card -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <!-- Difficulty Badge -->
+                <TextView
+                    android:id="@+id/tvDetailDifficulty"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:text="Hard"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/badge_difficulty_large"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp" />
+            </RelativeLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Description"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="#2C3E50"
-                        android:layout_marginBottom="12dp"/>
-
-                    <TextView
-                        android:id="@+id/tvDetailDescription"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="A beautiful hiking trail..."
-                        android:textSize="15sp"
-                        android:textColor="#34495E"
-                        android:lineSpacingExtra="4dp"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Action Buttons -->
+            <!-- Content Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp">
+                android:orientation="vertical"
+                android:padding="16dp">
 
-                <Button
-                    android:id="@+id/btnEditHike"
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_weight="1"
-                    android:text="Edit Hike"
-                    android:textSize="16sp"
-                    android:textColor="#FFFFFF"
-                    android:backgroundTint="#E67E22"
-                    android:layout_marginEnd="8dp"
-                    app:cornerRadius="8dp"
-                    app:icon="@android:drawable/ic_menu_edit"
-                    app:iconTint="#FFFFFF"/>
-
-                <Button
-                    android:id="@+id/btnDeleteHike"
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_weight="1"
-                    android:text="Delete Hike"
-                    android:textSize="16sp"
-                    android:textColor="#FFFFFF"
-                    android:backgroundTint="#E74C3C"
-                    android:layout_marginStart="8dp"
-                    app:cornerRadius="8dp"
-                    app:icon="@android:drawable/ic_menu_delete"
-                    app:iconTint="#FFFFFF"/>
-            </LinearLayout>
-
-            <!-- Observations Section -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
-
-                <LinearLayout
+                <!-- Quick Info Card -->
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginBottom="12dp">
+                        android:orientation="vertical"
+                        android:padding="20dp">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Observations"
+                            android:text="Quick Info"
                             android:textSize="18sp"
                             android:textStyle="bold"
-                            android:textColor="#2C3E50"/>
+                            android:textColor="#2C3E50"
+                            android:layout_marginBottom="16dp" />
 
-                        <Button
-                            android:id="@+id/btnAddObservation"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:text="+ Add"
-                            android:textSize="14sp"
-                            android:textColor="#FFFFFF"
-                            android:backgroundTint="#27AE60"
-                            app:cornerRadius="8dp"/>
+                        <!-- Location Row -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="12dp"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:text="📍"
+                                android:textSize="20sp"
+                                android:gravity="center" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:layout_marginStart="12dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Location"
+                                    android:textSize="12sp"
+                                    android:textColor="#95A5A6"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvDetailLocation"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Wales, UK"
+                                    android:textSize="16sp"
+                                    android:textColor="#2C3E50"
+                                    android:layout_marginTop="2dp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Date Row -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="12dp"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:text="📅"
+                                android:textSize="20sp"
+                                android:gravity="center" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:layout_marginStart="12dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Date"
+                                    android:textSize="12sp"
+                                    android:textColor="#95A5A6"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvDetailDate"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="15/12/2024"
+                                    android:textSize="16sp"
+                                    android:textColor="#2C3E50"
+                                    android:layout_marginTop="2dp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Length Row -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="12dp"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:text="🥾"
+                                android:textSize="20sp"
+                                android:gravity="center" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:layout_marginStart="12dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Length"
+                                    android:textSize="12sp"
+                                    android:textColor="#95A5A6"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvDetailLength"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="10.5 km"
+                                    android:textSize="16sp"
+                                    android:textColor="#2C3E50"
+                                    android:layout_marginTop="2dp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Parking Row -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="12dp"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:text="🚗"
+                                android:textSize="20sp"
+                                android:gravity="center" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:layout_marginStart="12dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Parking Available"
+                                    android:textSize="12sp"
+                                    android:textColor="#95A5A6"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvDetailParking"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Yes"
+                                    android:textSize="16sp"
+                                    android:textColor="#2C3E50"
+                                    android:layout_marginTop="2dp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Duration Row -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="12dp"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:text="⏱️"
+                                android:textSize="20sp"
+                                android:gravity="center" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:layout_marginStart="12dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Estimated Duration"
+                                    android:textSize="12sp"
+                                    android:textColor="#95A5A6"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvDetailDuration"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="4-6 hours"
+                                    android:textSize="16sp"
+                                    android:textColor="#2C3E50"
+                                    android:layout_marginTop="2dp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Group Size Row -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:text="👥"
+                                android:textSize="20sp"
+                                android:gravity="center" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:layout_marginStart="12dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Maximum Group Size"
+                                    android:textSize="12sp"
+                                    android:textColor="#95A5A6"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvDetailGroupSize"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="10 people"
+                                    android:textSize="16sp"
+                                    android:textColor="#2C3E50"
+                                    android:layout_marginTop="2dp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
                     </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Description Card -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Description"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="#2C3E50"
+                            android:layout_marginBottom="12dp" />
+
+                        <TextView
+                            android:id="@+id/tvDetailDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="A beautiful hiking trail..."
+                            android:textSize="15sp"
+                            android:textColor="#34495E"
+                            android:lineSpacingExtra="4dp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Action Buttons -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp">
 
                     <Button
-                        android:id="@+id/btnViewObservations"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:text="View All Observations"
-                        android:textColor="#3498DB"
-                        android:backgroundTint="#E8F4F8"
-                        app:cornerRadius="8dp"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                        android:id="@+id/btnEditHike"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:text="Edit Hike"
+                        android:textSize="16sp"
+                        android:textColor="#FFFFFF"
+                        android:backgroundTint="#E67E22"
+                        android:layout_marginEnd="8dp"
+                        app:cornerRadius="8dp" />
 
+                    <Button
+                        android:id="@+id/btnDeleteHike"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:text="Delete Hike"
+                        android:textSize="16sp"
+                        android:textColor="#FFFFFF"
+                        android:backgroundTint="#E74C3C"
+                        android:layout_marginStart="8dp"
+                        app:cornerRadius="8dp" />
+                </LinearLayout>
+
+                <!-- Observations Section -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="12dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Observations"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:textColor="#2C3E50" />
+
+                            <Button
+                                android:id="@+id/btnAddObservation"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:text="+ Add"
+                                android:textSize="14sp"
+                                android:textColor="#FFFFFF"
+                                android:backgroundTint="#27AE60"
+                                app:cornerRadius="8dp" />
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/btnViewObservations"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:text="View All Observations"
+                            android:textColor="#3498DB"
+                            android:backgroundTint="#E8F4F8"
+                            app:cornerRadius="8dp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>
