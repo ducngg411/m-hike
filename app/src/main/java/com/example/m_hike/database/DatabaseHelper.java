@@ -15,7 +15,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
     // Database info
     private static final String DATABASE_NAME = "MHikeDB";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2; // bumped for cascade FK
 
     // Table names
     private static final String TABLE_HIKES = "Hikes";
@@ -46,36 +46,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_HIKES_TABLE = "CREATE TABLE " + TABLE_HIKES + "("
-                + KEY_HIKE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + KEY_NAME + " TEXT,"
-                + KEY_LOCATION + " TEXT,"
-                + KEY_DATE + " TEXT,"
-                + KEY_PARKING + " TEXT,"
-                + KEY_LENGTH + " REAL,"
-                + KEY_DIFFICULTY + " TEXT,"
-                + KEY_DESCRIPTION + " TEXT,"
-                + KEY_DURATION + " TEXT,"
-                + KEY_GROUP_SIZE + " INTEGER"
-                + ")";
+        String CREATE_HIKES_TABLE = "CREATE TABLE " + TABLE_HIKES + "(" +
+                KEY_HIKE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                KEY_NAME + " TEXT," +
+                KEY_LOCATION + " TEXT," +
+                KEY_DATE + " TEXT," +
+                KEY_PARKING + " TEXT," +
+                KEY_LENGTH + " REAL," +
+                KEY_DIFFICULTY + " TEXT," +
+                KEY_DESCRIPTION + " TEXT," +
+                KEY_DURATION + " TEXT," +
+                KEY_GROUP_SIZE + " INTEGER" +
+                ")";
         db.execSQL(CREATE_HIKES_TABLE);
 
-        String CREATE_OBSERVATIONS_TABLE = "CREATE TABLE " + TABLE_OBSERVATIONS + "("
-                + KEY_OBS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + KEY_HIKE_FK + " INTEGER,"
-                + KEY_OBSERVATION + " TEXT,"
-                + KEY_TIME + " TEXT,"
-                + KEY_COMMENT + " TEXT,"
-                + "FOREIGN KEY(" + KEY_HIKE_FK + ") REFERENCES " + TABLE_HIKES + "(" + KEY_HIKE_ID + ")"
-                + ")";
+        // Observations with ON DELETE CASCADE
+        String CREATE_OBSERVATIONS_TABLE = "CREATE TABLE " + TABLE_OBSERVATIONS + "(" +
+                KEY_OBS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                KEY_HIKE_FK + " INTEGER," +
+                KEY_OBSERVATION + " TEXT," +
+                KEY_TIME + " TEXT," +
+                KEY_COMMENT + " TEXT," +
+                "FOREIGN KEY(" + KEY_HIKE_FK + ") REFERENCES " + TABLE_HIKES + "(" + KEY_HIKE_ID + ") ON DELETE CASCADE" +
+                ")";
         db.execSQL(CREATE_OBSERVATIONS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_OBSERVATIONS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_HIKES);
-        onCreate(db);
+        // Migrate to add ON DELETE CASCADE without losing data
+        if (oldVersion < 2) {
+            db.beginTransaction();
+            try {
+                String CREATE_OBSERVATIONS_TABLE_NEW = "CREATE TABLE Observations_new(" +
+                        KEY_OBS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        KEY_HIKE_FK + " INTEGER," +
+                        KEY_OBSERVATION + " TEXT," +
+                        KEY_TIME + " TEXT," +
+                        KEY_COMMENT + " TEXT," +
+                        "FOREIGN KEY(" + KEY_HIKE_FK + ") REFERENCES " + TABLE_HIKES + "(" + KEY_HIKE_ID + ") ON DELETE CASCADE" +
+                        ")";
+                db.execSQL(CREATE_OBSERVATIONS_TABLE_NEW);
+                // Remove orphan observations referencing non-existent hikes (data hygiene)
+                db.execSQL("DELETE FROM " + TABLE_OBSERVATIONS + " WHERE " + KEY_HIKE_FK + " NOT IN (SELECT " + KEY_HIKE_ID + " FROM " + TABLE_HIKES + ")");
+                db.execSQL("INSERT INTO Observations_new (" +
+                        KEY_OBS_ID + "," + KEY_HIKE_FK + "," + KEY_OBSERVATION + "," + KEY_TIME + "," + KEY_COMMENT + ") " +
+                        "SELECT " + KEY_OBS_ID + "," + KEY_HIKE_FK + "," + KEY_OBSERVATION + "," + KEY_TIME + "," + KEY_COMMENT + " FROM " + TABLE_OBSERVATIONS);
+                db.execSQL("DROP TABLE IF EXISTS " + TABLE_OBSERVATIONS);
+                db.execSQL("ALTER TABLE Observations_new RENAME TO " + TABLE_OBSERVATIONS);
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+        }
     }
 
     @Override
@@ -182,17 +205,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return rowsAffected;
     }
 
-    // Delete a hike
+    // Delete a hike (child observations removed first to satisfy FK)
     public void deleteHike(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_HIKES, KEY_HIKE_ID + "=?", new String[]{String.valueOf(id)});
         db.close();
     }
 
-    // Delete all hikes
+    // Unified bulk clear method (formerly deleteAllHikes & clearAllData)
     public void deleteAllHikes() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_HIKES, null, null);
+        db.delete(TABLE_HIKES, null, null); // Observations auto-deleted via cascade
         db.close();
     }
 

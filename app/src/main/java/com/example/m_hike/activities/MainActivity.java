@@ -138,8 +138,9 @@ public class MainActivity extends AppCompatActivity implements HikeAdapter.OnHik
                 startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_profile) {
-                // TODO: Tạo ProfileActivity sau
-                Toast.makeText(this, "Profile - Coming soon!", Toast.LENGTH_SHORT).show();
+                // Open Profile
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(intent);
                 return true;
             }
 

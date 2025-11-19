@@ -47,6 +47,11 @@
             android:theme="@style/Theme.MHike"
             android:windowSoftInputMode="adjustResize"/>
 
+        <!-- Profile -->
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:label="Profile"
+            android:theme="@style/Theme.MHike"/>
     </application>
 
 </manifest>
