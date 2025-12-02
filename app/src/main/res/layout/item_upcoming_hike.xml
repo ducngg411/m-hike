@@ -45,6 +45,15 @@
                 android:textSize="12sp"
                 android:textColor="#7F8C8D"
                 android:layout_marginTop="2dp"/>
+
+            <TextView
+                android:id="@+id/tvUpcomingHikeLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wales, UK"
+                android:textSize="12sp"
+                android:textColor="#7F8C8D"
+                android:layout_marginTop="2dp"/>
         </LinearLayout>
 
         <TextView

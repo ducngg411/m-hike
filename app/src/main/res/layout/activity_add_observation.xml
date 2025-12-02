@@ -234,7 +234,6 @@
                                 android:inputType="textMultiLine"
                                 android:minLines="4" />
                         </com.google.android.material.textfield.TextInputLayout>
-
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 

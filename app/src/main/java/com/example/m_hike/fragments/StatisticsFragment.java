@@ -18,6 +18,8 @@ import com.example.m_hike.adapters.UpcomingHikeAdapter;
 import com.example.m_hike.database.DatabaseHelper;
 import com.example.m_hike.models.Hike;
 
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,6 +39,8 @@ public class StatisticsFragment extends Fragment {
     // Data
     private DatabaseHelper dbHelper;
     private UpcomingHikeAdapter upcomingAdapter;
+
+    private static final String TAG = "StatisticsFragment";
 
     @Nullable
     @Override
@@ -109,11 +113,12 @@ public class StatisticsFragment extends Fragment {
         }
         tvStatTotalDistance.setText(String.format(Locale.getDefault(), "%.1f km", totalDistance));
 
-        // Difficulty distribution
+        // Difficulty distribution (null-safe)
         int easyCount = 0, moderateCount = 0, hardCount = 0, veryHardCount = 0;
 
         for (Hike hike : allHikes) {
-            String difficulty = hike.getDifficulty().toLowerCase();
+            String diffRaw = hike.getDifficulty();
+            String difficulty = diffRaw == null ? "" : diffRaw.toLowerCase(Locale.getDefault());
             switch (difficulty) {
                 case "easy":
                     easyCount++;
@@ -126,6 +131,9 @@ public class StatisticsFragment extends Fragment {
                     break;
                 case "very hard":
                     veryHardCount++;
+                    break;
+                default:
+                    // ignore unknown/empty difficulty
                     break;
             }
         }
@@ -142,6 +150,11 @@ public class StatisticsFragment extends Fragment {
             progressModerate.setProgress((moderateCount * 100) / totalHikes);
             progressHard.setProgress((hardCount * 100) / totalHikes);
             progressVeryHard.setProgress((veryHardCount * 100) / totalHikes);
+        } else {
+            progressEasy.setProgress(0);
+            progressModerate.setProgress(0);
+            progressHard.setProgress(0);
+            progressVeryHard.setProgress(0);
         }
 
         // Load upcoming hikes
@@ -155,12 +168,16 @@ public class StatisticsFragment extends Fragment {
 
         for (Hike hike : allHikes) {
             try {
-                Date hikeDate = sdf.parse(hike.getDate());
+                String dateStr = hike.getDate();
+                if (dateStr == null || dateStr.trim().isEmpty()) {
+                    continue;
+                }
+                Date hikeDate = sdf.parse(dateStr);
                 if (hikeDate != null && hikeDate.after(today)) {
                     upcomingHikes.add(hike);
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
+            } catch (Exception e) { // catch any parsing or null issues
+                Log.e(TAG, "Failed to parse hike date for hike id=" + hike.getId(), e);
             }
         }
 

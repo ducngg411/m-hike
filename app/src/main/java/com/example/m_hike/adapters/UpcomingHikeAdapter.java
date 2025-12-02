@@ -66,6 +66,7 @@ public class UpcomingHikeAdapter extends RecyclerView.Adapter<UpcomingHikeAdapte
             super(itemView);
             tvHikeName = itemView.findViewById(R.id.tvUpcomingHikeName);
             tvHikeDate = itemView.findViewById(R.id.tvUpcomingHikeDate);
+            tvHikeLocation = itemView.findViewById(R.id.tvUpcomingHikeLocation);
             tvHikeLength = itemView.findViewById(R.id.tvUpcomingHikeLength);
         }
     }
